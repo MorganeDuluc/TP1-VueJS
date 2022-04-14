@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>ToDo List</h1>
-    <ToDoForm></ToDoForm>
+    <ToDoForm />
 
   </div>
 </template>
@@ -26,4 +26,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+/* #body {
+  background-color: #1E2626;
+  color: white;
+} */
 </style>

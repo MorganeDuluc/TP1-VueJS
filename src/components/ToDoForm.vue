@@ -1,197 +1,199 @@
 <template>
-<div>
-  <!-- <form @submit="onSubmit" id="form">
-    <div class="boxInput">
-      <label for="title">Title</label>
-      <input required type="text" title="title" id="title" name="title" v-model="title">
-    </div>
-
-    <div class="boxInput">
-      <label for="title">Heure estimée</label>
-      <input required type="number" title="hours" id="hours" name="hours" v-model="hours">
-    </div>
-
-    <select v-model="workers" name="people" required>
-      <option disabled value="">Choisissez</option>
-      <option>Gui</option>
-      <option>Vinx</option>
-      <option>Julie</option>
-    </select>
-    <span>Sélectionné : {{ workers }}</span>
-
-    <button type="submit">Valider</button>
-  </form> -->
-
-  <div id="todo-list-example">
-    <form v-on:submit.prevent="addNewTodo" id="form">
+  <div>
+    <form v-on:submit.prevent="addNewTask" id="form">
       <div class="boxInput">
-        <label for="new-name-task">Ajouter une tâche</label>
+        <label for="name">Ajouter une tâche</label>
         <input
-          v-model="nameTask"
-          id="new-name-task"
-          placeholder="Ex. Faire le webdesign"
+          v-model="name"
+          id="name"
           required
         >
       </div>
       <div class="boxInput">
-        <label for="new-time-task">Heure estimée</label>
+        <label for="time">Heure estimée</label>
         <input
           type="number"
-          v-model="hours"
-          id="new-time-task"
-          placeholder="Ex. 2 heures"
+          v-model="time"
+          id="time"
           required
         >
       </div>
-      <div>
-        <select v-model="workers" name="people" required>
-          <option disabled value="">Choisissez</option>
-          <option>Gui</option>
-          <option>Vinx</option>
-          <option>Julie</option>
+      <div class="boxInput">
+        <label for="worker">Responsable</label>
+        <select
+          v-model="worker"
+          id="worker"
+          name="worker"
+          required>
+          <option disabled value=""/>
+          <option>Gui {{option}}</option>
+          <option>Vinx {{option}}</option>
+          <option>Julie {{option}}</option>
         </select>
       </div>
 
-      <button>Add</button>
+      <button type="submit">Ajouter</button>
     </form>
-    <ul>
-      <li
-        is="task-title"
-        v-for="(todo, index) in todos"
-        v-bind:key="todo.id"
-        v-bind:title="todo.title"
-        v-on:remove="todos.splice(index, 1)"
-      />
-      <li
-        is="task-hour"
-        v-for="(todo, index) in todos"
-        v-bind:key="todo.id"
-        v-bind:hour="todo.hour"
-        v-on:remove="todos.splice(index, 1)"
-      />
-      <li
-        is="task-worker"
-        v-for="(todo, index) in todos"
-        v-bind:key="todo.id"
-        v-bind:worker="todo.worker"
-        v-on:remove="todos.splice(index, 1)"
-      />
-    </ul>
+
+    <div id="container">
+      <ul v-for="(task, index) in tasksList" :key="index" id="container-list">
+        <li id="list">
+          <div id="infos">
+            <p id="nameStyle">{{ task.nameTask }}</p>
+            <p id="timeStyle">{{ task.timeTask}} heures estimées</p>
+            <p id="workerStyle">{{ task.workerTask }}</p>
+          </div>
+          <div id="actions">
+            <button class="button" v-on:click="deleteTask(index)">Supprimer</button>
+            <button class="button" v-on:click="updateTask()">Modifier</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
 
-// export default {
-//   name: "ToDoForm",
 
-//   data() {
-//     return {
-//       workers: '',
-//       hours: '',
-//       title: '',
-//       list: [],
-//     }
-//   },
-
-//   methods:{
-//     onSubmit: function(e) {
-//       console.log("=====================")
-//       console.log(e)
-//       console.log(e.target)
-//       e.preventDefault()
-//     },
-
-//     displayList: function() {
-//       this.list = [];
-
-//       if (this.title && this.hours && this.workers) {
-//         return (
-//           t
-//         )
-//       }
-//     }
-//   }
-// }
 
 export default({
   name: "ToDoForm",
-  el: '#todo-list-example',
 
-  // template: '\
-  //   <li>\
-  //     {{ title }}\
-  //     <button v-on:click="$emit(\'remove\')">Supprimer</button>\
-  //   </li>\
-  // ',
-  // props: ['title'],
+  props: {
+    option: String,
+  },
 
   data() {
     return {
-      nameTask: '',
-      todos: [
-        {
-          id: 1,
-          title: 'Faire la vaisselle',
-          hour: '',
-          worker: 'Gui',
-        },
+      name: '',
+      time: '',
+      worker: '',
+      tasksList: [
+        { nameTask: 'Construction des wirefram', timeTask: '2', workerTask: 'Gui', },
+        { nameTask: 'Charte graphique', timeTask: '2', workerTask: 'Vinx', },
       ],
-      nextTodoId: 2
     }
   },
 
   methods: {
-    addNewTodo: function () {
-      this.todos.push({
-        id: this.nextTodoId++,
-        title: this.nameTask
+    addNewTask: function() {
+      this.tasksList.push({
+        nameTask: this.name,
+        timeTask: this.time,
+        workerTask: this.worker
       })
-      this.nameTask = ''
-    }
+    },
+
+    deleteTask(index) {
+      this.tasksList.splice(index, 1)
+    },
+
+    // updateTask: function () {
+    //   this.tasksList.update({
+    //     nameTask: this.name,
+    //     timeTask: this.time,
+    //     workerTask: this.worker
+    //   })
+    // }
   }
 })
 </script>
 
 <style>
+  #title {
+    color: white;
+  }
+
   #form {
-    background-color: #bbbbbb;
+    background-color: #dbdbdb;
     height: 80px;
     border-radius: 24px;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     display: flex;
-    padding: 0 16px 0 16px;
+    padding: 32px 0 32px 0;
   }
 
-  .boxInput {
-    flex-direction: column;
-    display: flex;
-  }
-
-  input {
-  padding: 4px; border-radius: 16px; border: none; height: 20px; } label {
+  label {
     justify-content: left;
     display: flex;
     font-size: 12px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    color: #707070;
+  }
+
+  input {
+    padding: 8px;
+    /* border: 1px solid #FF4200; */
+    border-radius: 8px;
+    border: none;
+    height: 20px;
+    width: 200px;
+    background-color: white;
+  }
+
+  select {
+    padding: 8px;
+    /* border: 1px solid #FF4200; */
+    border-radius: 8px;
+    border: none;
+    width: 200px;
+    height: 37px;
+    background-color: white;
+    color: #707070;
   }
 
   button {
     padding: 8px;
-    border-radius: 16px;
-    background-color:cadetblue;
-    color:white;
+    /* border: 1px solid #ffffff; */
     border: none;
+    border-radius: 50px;
+    background-color: #1e2626;
+    color:white;
     height: 40px;
-    width: 100px;
+    width: 120px;
+    margin-top: 24px;
+    cursor: pointer;
   }
 
-  select {
-    padding: 4px;
-    border-radius: 16px;
-    border: none;
-    height: 20px;
+  #container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #container-list {
+    list-style-type:none;
+    border: 1px solid #ff4200;
+    width: 450px;
+    height: 150px;
+    display: flex;
+    margin-top: 32px;
+  }
+
+  #list {
+    display: grid;
+    height: fit-content;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #nameStyle {
+    justify-content: start;
+    display: flex;
+    padding-top: 8px;
+  }
+
+  #timeStyle {
+    font-style: italic;
+    font-size: 12px;
+    color: #707070;
+    justify-content: start;
+    display: flex;
+  }
+
+  #workerStyle {
+    color: #ff4200;
+    justify-content: start;
+    display: flex;
   }
 </style>
